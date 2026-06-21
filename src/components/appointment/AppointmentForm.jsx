@@ -39,7 +39,7 @@ const AppointmentForm = () => {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/appointments",
+        "https://dentacare-kok5.onrender.com/api/appointments",
         {
           method: "POST",
           headers: {
