@@ -37,7 +37,7 @@ const Contact = () => {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/contacts",
+        " https://dentacare-kok5.onrender.com/api/contacts",
         {
           method: "POST",
           headers: {
