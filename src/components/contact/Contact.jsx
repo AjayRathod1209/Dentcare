@@ -1,4 +1,76 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/contacts",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess("✅ Message Sent Successfully!");
+
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+      } else {
+        setSuccess(
+          "❌ " + (data.message || "Something went wrong")
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      setSuccess("❌ Server Error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -91,38 +163,72 @@ const Contact = () => {
               Send Message
             </h3>
 
-            <form className="mt-8 space-y-5">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-8 space-y-5"
+            >
 
               <input
                 type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
                 placeholder="Full Name"
+                required
                 className="w-full px-5 py-4 rounded-xl border border-slate-200 outline-none focus:border-cyan-500"
               />
 
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Email Address"
+                required
                 className="w-full px-5 py-4 rounded-xl border border-slate-200 outline-none focus:border-cyan-500"
               />
 
               <input
                 type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
                 placeholder="Phone Number"
+                required
                 className="w-full px-5 py-4 rounded-xl border border-slate-200 outline-none focus:border-cyan-500"
               />
 
               <textarea
                 rows="5"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Your Message"
+                required
                 className="w-full px-5 py-4 rounded-xl border border-slate-200 outline-none focus:border-cyan-500 resize-none"
               />
 
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full bg-blue-900 text-white py-4 rounded-xl font-semibold hover:bg-blue-800 transition-all duration-300"
               >
-                Send Message
+                {loading
+                  ? "Sending..."
+                  : "Send Message"}
               </button>
+
+              {success && (
+                <div
+                  className={`mt-4 px-4 py-3 rounded-xl text-center font-medium ${
+                    success.includes("✅")
+                      ? "bg-green-100 text-green-700 border border-green-300"
+                      : "bg-red-100 text-red-700 border border-red-300"
+                  }`}
+                >
+                  {success}
+                </div>
+              )}
 
             </form>
 
