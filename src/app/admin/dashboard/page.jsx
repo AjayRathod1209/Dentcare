@@ -11,7 +11,7 @@ export default function DashboardPage() {
     try {
       const [appointmentsRes, contactsRes] = await Promise.all([
         fetch("https://dentacare-kok5.onrender.com/api/appointments"),
-        fetch("http://localhost:5000/api/contacts"),
+        fetch("https://dentacare-kok5.onrender.com/api/contacts"),
       ]);
 
       const appointmentsData = await appointmentsRes.json();
