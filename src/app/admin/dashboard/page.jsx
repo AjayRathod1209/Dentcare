@@ -10,7 +10,7 @@ export default function DashboardPage() {
   const fetchDashboardData = async () => {
     try {
       const [appointmentsRes, contactsRes] = await Promise.all([
-        fetch("http://localhost:5000/api/appointments"),
+        fetch("https://dentacare-kok5.onrender.com/api/appointments"),
         fetch("http://localhost:5000/api/contacts"),
       ]);
 
