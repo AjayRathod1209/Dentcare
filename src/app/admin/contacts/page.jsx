@@ -25,7 +25,7 @@ export default function ContactsPage() {
 const deleteContact = async (id) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/api/contacts/${id}`,
+      `https://dentacare-kok5.onrender.com/api/contacts/${id}`,
       {
         method: "DELETE",
       }
@@ -47,7 +47,7 @@ const deleteContact = async (id) => {
 const updateStatus = async (id, status) => {
   try {
     await fetch(
-      `http://localhost:5000/api/contacts/${id}`,
+      ` https://dentacare-kok5.onrender.com/api/contacts/${id}`,
       {
         method: "PUT",
         headers: {

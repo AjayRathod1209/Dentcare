@@ -9,7 +9,7 @@ export default function AppointmentsPage() {
   const fetchAppointments = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/appointments"
+        "https://dentacare-kok5.onrender.com/api/appointments"
       );
 
       const data = await response.json();
@@ -24,7 +24,7 @@ export default function AppointmentsPage() {
   const deleteAppointment = async (id) => {
   try {
     await fetch(
-      `http://localhost:5000/api/appointments/${id}`,
+      ` https://dentacare-kok5.onrender.com/api/appointments/${id}`,
       {
         method: "DELETE",
       }
@@ -38,7 +38,7 @@ export default function AppointmentsPage() {
     const updateStatus = async (id, status) => {
   try {
     await fetch(
-      `http://localhost:5000/api/appointments/${id}`,
+      ` https://dentacare-kok5.onrender.com/api/appointments/${id}`,
       {
         method: "PUT",
         headers: {
