@@ -43,7 +43,7 @@ export default function SignupPage() {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/signup",
+        "https://dentacare-kok5.onrender.com/api/admin/signup",
         {
           method: "POST",
           headers: {
