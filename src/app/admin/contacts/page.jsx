@@ -9,7 +9,7 @@ export default function ContactsPage() {
   const fetchContacts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/contacts"
+        "https://dentacare-kok5.onrender.com/api/contacts"
       );
 
       const data = await response.json();
