@@ -1,5 +1,6 @@
 "use client";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";
 
 export default function ContactsPage() {
@@ -65,6 +66,54 @@ const updateStatus = async (id, status) => {
   }
 };
 
+  const exportToExcel = () => {
+  const excelData = contacts.map((contact) => ({
+    Name: contact.fullName,
+    Email: contact.email,
+    Phone: contact.phone,
+    Message: contact.message,
+    Status: contact.status,
+    "Created At": new Date(
+      contact.createdAt
+    ).toLocaleString(),
+  }));
+
+  const worksheet =
+    XLSX.utils.json_to_sheet(excelData);
+
+  const workbook =
+    XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Contacts"
+  );
+
+  const excelBuffer = XLSX.write(
+    workbook,
+    {
+      bookType: "xlsx",
+      type: "array",
+    }
+  );
+
+  const file = new Blob(
+    [excelBuffer],
+    {
+      type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    }
+  );
+
+  saveAs(
+    file,
+    `Contacts_${new Date()
+      .toISOString()
+      .slice(0, 10)}.xlsx`
+  );
+};
+
   useEffect(() => {
     fetchContacts();
   }, []);
@@ -84,9 +133,12 @@ const updateStatus = async (id, status) => {
           </p>
         </div>
 
-        <button className="bg-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-cyan-600 transition">
-          Export Excel
-        </button>
+    <button
+  onClick={exportToExcel}
+  className="bg-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-cyan-600 transition"
+>
+  Export Excel
+</button>
 
       </div>
 
