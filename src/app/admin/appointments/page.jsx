@@ -1,5 +1,6 @@
 "use client";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";
 
 export default function AppointmentsPage() {
@@ -55,7 +56,55 @@ export default function AppointmentsPage() {
     console.log(error);
   }
 };
+ const exportToExcel = () => {
+  const excelData = appointments.map((item) => ({
+    Name: item.fullName,
+    Email: item.email,
+    Phone: item.phone,
+    Service: item.service,
+    "Appointment Date": item.appointmentDate,
+    Status: item.status,
+    Message: item.message,
+    "Created At": new Date(
+      item.createdAt
+    ).toLocaleString(),
+  }));
 
+  const worksheet =
+    XLSX.utils.json_to_sheet(excelData);
+
+  const workbook =
+    XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Appointments"
+  );
+
+  const excelBuffer = XLSX.write(
+    workbook,
+    {
+      bookType: "xlsx",
+      type: "array",
+    }
+  );
+
+  const file = new Blob(
+    [excelBuffer],
+    {
+      type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    }
+  );
+
+  saveAs(
+    file,
+    `Appointments_${new Date()
+      .toISOString()
+      .slice(0, 10)}.xlsx`
+  );
+};
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -74,10 +123,12 @@ export default function AppointmentsPage() {
             Manage all appointment requests
           </p>
         </div>
-
-        <button className="bg-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-cyan-600 transition">
-          Export Excel
-        </button>
+<button
+  onClick={exportToExcel}
+  className="bg-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-cyan-600 transition"
+>
+  Export Excel
+</button>
 
       </div>
 
